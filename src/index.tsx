@@ -5,7 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from "./styles/GlobalStyles";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// Asegúrate de que `root` no sea null
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error("El elemento root no se encontró en el DOM.");
+}
+
+const root = ReactDOM.createRoot(rootElement);
+
 root.render(
   <React.StrictMode>
     <GlobalStyles />
@@ -13,7 +20,5 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+

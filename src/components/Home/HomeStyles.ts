@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+// Define las props para PokemonCard
+interface PokemonCardProps {
+  type: string; // Agregamos la propiedad `type` aquí
+}
+
 export const MainContainer = styled.main`
     max-width: 1200px;
     margin: 0 auto;
@@ -28,7 +33,7 @@ export const SearchBar = styled.input`
   }
 `;
 
-export const PokemonCard = styled.div`
+export const PokemonCard = styled.div<PokemonCardProps>`
   background-color: #fff;
   border: 2px solid ${(props) => (props.type === "fire" ? "#ff4500" : "#2a75bb")};
   border-radius: 12px;

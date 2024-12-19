@@ -1,19 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { MainContainer, Title, SearchBar, PokemonGrid, PokemonCard } from "./HomeStyles";
-import pokeApi from "../api/pokeApi";
+import {
+     MainContainer,
+     Title,
+     SearchBar, 
+     PokemonGrid, 
+     PokemonCard } from "./HomeStyles";
+import pokeApi from "../../api/pokeApi";
 import { Link } from "react-router-dom";
 
+//Define interfaces para los datos: Crea una interfaz para el Pokémon: 
+interface Pokemon {
+    id: number;
+    name: string;
+    image: string;
+    types: { type: { name: string } }[];
+  } 
 
 
-const Home =()=>{
-    const [pokemonList, setPokemonList] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const Home: React.FC = () => {
+        // Estados para la lista de Pokémon y el término de búsqueda
+        const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
+        const [searchTerm, setSearchTerm] = useState<string>("");
+
     // Obtener pokemon de la api
     useEffect(() =>{ 
         const fetchPokemon =async () => {
             try{
                 const response = await pokeApi.get("pokemon?limit=200");
-                const promises =response.data.results.map(async (pokemon) => {
+
+                // Mapeo de los resultados para obtener los detalles
+                const promises = response.data.results.map(async (pokemon: { url: string }) => {
                     const details =await pokeApi.get (pokemon.url);
                     return{
                         id: details.data.id,
@@ -46,17 +62,19 @@ const Home =()=>{
              onChange={(e)=> setSearchTerm(e.target.value)} //Actualiza el estado de busqueda
              />
             <PokemonGrid>
-                {filteredPokemon.map((pokemon) => (
-                  <Link to={`/pokemon/${pokemon.id}`} key={pokemon.id}>
-                  <PokemonCard type={pokemon.types[0].type.name}>
-                  <img src={pokemon.image} alt={pokemon.name} />
-                  <h2>{pokemon.name}</h2>
-                  </PokemonCard>
-                  </Link>
-               ))}
-              </PokemonGrid>;     
+        {filteredPokemon.map((pokemon) => (
+          <Link to={`/pokemon/${pokemon.id}`} key={pokemon.id}>
+            <PokemonCard type={pokemon.types[0].type.name}>
+              <img src={pokemon.image} alt={pokemon.name} />
+              <h2>{pokemon.name}</h2>
+            </PokemonCard>
+          </Link>
+        ))}
+      </PokemonGrid>   
     </MainContainer>
   );
 };
 
 export default Home;
+
+
